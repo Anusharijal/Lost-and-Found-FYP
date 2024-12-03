@@ -85,7 +85,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.includes("success")) {
                     alert("Login successful!");
-                    window.location.href = "../dashboard/dashboard.php"; // Redirect to the dashboard
+                    window.location.href = "../index.php"; // Redirect to the homepage
                 } else if (response.includes("error")) {
                     alert("Login failed: " + response);
                 }
