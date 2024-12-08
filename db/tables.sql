@@ -28,3 +28,43 @@ CREATE TABLE IF NOT EXISTS categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
+
+
+CREATE TABLE lost_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    lost_time DATETIME NOT NULL,
+    item_picture VARCHAR(255),
+    description TEXT,
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL
+);
+
+
+CREATE TABLE found_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    found_time DATETIME NOT NULL,
+    item_picture VARCHAR(255),
+    description TEXT,
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE claim_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    item_name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    lost_time DATETIME NOT NULL,
+    item_picture VARCHAR(255),
+    description TEXT,
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    claimed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+

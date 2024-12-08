@@ -96,24 +96,6 @@
     font-size: 30px;
 }
 
-.search-btn{
-    background-color: #ffcc00;
-    display: inline-block;
-    color: black;
-    text-decoration: none;
-    border-radius: 10px;
-    padding: 20px 100px;
-    font-weight: bold;
-    font-size: 30px;
-    margin-top: 100px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    z-index: 2;
-}
-.search-btn:hover{
-    background-color: green;
-    color: white;
-}
-
 /* how it works section */
   #how-it-works {
     text-align: center;

@@ -1,11 +1,21 @@
 <?php
 session_start();
 // After validating login credentials, set a session
-$_SESSION['logged_in'] = true; // This is just an example; your login logic will vary
+$_SESSION['logged_in'] = true; 
 
 // Then, in JavaScript, you can redirect
 echo "<script>window.location.href = 'index.php';</script>";
 ?>
+<?php
+if (isset($_GET['success'])) {
+    echo '<div class="alert alert-success">' . htmlspecialchars($_GET['success']) . '</div>';
+}
+
+if (isset($_GET['error'])) {
+    echo '<div class="alert alert-danger">' . htmlspecialchars($_GET['error']) . '</div>';
+}
+?>
+
 
 
 <!DOCTYPE php>
@@ -41,7 +51,7 @@ echo "<script>window.location.href = 'index.php';</script>";
         <p>Cause every lost item deserves to be found</p>
         
 
-        <a href="search-btn.php" class="search-btn">Start Searching</a>
+        
     </section>
 
     <section id="how-it-works" class="how-it-works">

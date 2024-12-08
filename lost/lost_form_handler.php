@@ -1,7 +1,7 @@
 <?php
 // Database connection settings
 $host = 'localhost';
-$dbname = 'anusha_ko_lost_and_found_database';
+$dbname = 'lost_and_found_database';
 $username = 'root'; // Default username for XAMPP
 $password = '';     // Default password for XAMPP (leave empty)
 
@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $uploadFilePath = $uploadDir . basename($fileName);
 
         // Debugging: Check the file path
-        echo "Upload file path: " . $uploadFilePath . "<br>";
 
         // Check if file already exists
         if (file_exists($uploadFilePath)) {
@@ -45,13 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             // Try moving the uploaded file
             if (move_uploaded_file($fileTmpPath, $uploadFilePath)) {
-                echo "File successfully uploaded to: " . $uploadFilePath;
+                
                 $item_picture = $uploadFilePath;
             } else {
                 echo "Error: File upload failed.";
             }
         }
     } else {
+      
         echo "No file uploaded or error in file upload.";
     }
 
@@ -71,8 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':phone', $phone);
 
         $stmt->execute();
-        echo "Lost item reported successfully!";
+    
+        header("Location: ../index.php");
+        exit();
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
 }
+
+

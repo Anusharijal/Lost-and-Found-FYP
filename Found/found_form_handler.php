@@ -1,7 +1,7 @@
 <?php
 // Database connection settings
 $host = 'localhost';
-$dbname = 'anusha_ko_lost_and_found_database';
+$dbname = 'lost_and_found_database';
 $username = 'root'; // Default username for XAMPP
 $password = '';     // Default password for XAMPP (leave empty)
 
@@ -10,7 +10,9 @@ try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    die("Database connection failed: " . $e->getMessage());
+    // Return JSON response if database connection fails
+    echo json_encode(["status" => "error", "message" => "Database connection failed: " . $e->getMessage()]);
+    exit(); // Make sure no other code is executed after returning the response
 }
 
 // Handle form submission
@@ -32,29 +34,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $fileSize = $_FILES['item_picture']['size'];
         $fileType = $_FILES['item_picture']['type'];
 
+        // Get file extension
+        $fileInfo = pathinfo($fileName);
+        $fileExtension = strtolower($fileInfo['extension']); // Ensure lowercase extension
+
+        // Generate unique random numbers and format the new filename
+        $randomNumber = rand(10000, 99999);  // 5 random digits
+        $newFileName = 'photo_' . $randomNumber . '_' . $fileInfo['filename'] . '.' . $fileExtension; 
+
         // Define the directory where images will be stored
         $uploadDir = './../uploads/';
-        $uploadFilePath = $uploadDir . basename($fileName);
-
-        // Debugging: Check the file path
-        echo "Upload file path: " . $uploadFilePath . "<br>";
+        $uploadFilePath = $uploadDir . basename($newFileName);
 
         // Check if file already exists
         if (file_exists($uploadFilePath)) {
-            echo "Error: File already exists.";
+            echo json_encode(["status" => "error", "message" => "Error: File already exists."]);
+            exit(); // Ensure no further code is executed after the response
         } else {
             // Try moving the uploaded file
             if (move_uploaded_file($fileTmpPath, $uploadFilePath)) {
-                echo "File successfully uploaded to: " . $uploadFilePath;
                 $item_picture = $uploadFilePath;
             } else {
-                echo "Error: File upload failed.";
+                echo json_encode(["status" => "error", "message" => "Error: File upload failed."]);
+                exit(); // Ensure no further code is executed after the response
             }
         }
     } else {
-        echo "No file uploaded or error in file upload.";
+        echo json_encode(["status" => "error", "message" => "No file uploaded or error in file upload."]);
+        exit(); // Ensure no further code is executed after the response
     }
-
 
     // Insert the data into the database
     try {
@@ -71,8 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt->bindParam(':phone', $phone);
 
         $stmt->execute();
-        echo "Lost item reported successfully!";
+
+        header("Location: ../index.php");
+        exit();
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
     }
 }
+?>

@@ -1,7 +1,7 @@
 <?php
 // Database connection settings
 $host = 'localhost';
-$dbname = 'anusha_ko_lost_and_found_database';
+$dbname = 'lost_and_found_database';
 $username = 'root'; // Default username for XAMPP
 $password = '';     // Default password for XAMPP (leave empty)
 

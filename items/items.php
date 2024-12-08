@@ -1,7 +1,7 @@
 <?php
 // Database connection settings
 $host = 'localhost';
-$dbname = 'anusha_ko_lost_and_found_database';
+$dbname = 'lost_and_found_database';
 $username = 'root'; // Default username for XAMPP
 $password = '';     // Default password for XAMPP (leave empty)
 
@@ -15,9 +15,11 @@ try {
 
 // Retrieve lost items and found items from the database using UNION
 $sql = "
-    (SELECT item_name, location, lost_time AS item_time, item_picture, description, full_name, email, phone, 'Lost' AS type FROM lost_items)
+    (SELECT id, item_name, location, lost_time AS item_time, item_picture, description, full_name, email, phone, 'Lost' AS type FROM lost_items)
     UNION
-    (SELECT item_name, location, found_time AS item_time, item_picture, description, full_name, email, phone, 'Found' AS type FROM found_items)
+    (SELECT id, item_name, location, found_time AS item_time, item_picture, description, full_name, email, phone, 'Found' AS type FROM found_items)
+    UNION
+    (SELECT id, item_name, location, lost_time AS item_time, item_picture, description, full_name, email, phone, 'Claimed' AS type FROM claim_items)
     ORDER BY item_time DESC
 ";
 $stmt = $pdo->prepare($sql);
@@ -49,6 +51,7 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Description</th>
                     <th>Contact Info</th>
                     <th>Type</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,6 +76,18 @@ $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </td>
                             <td>
                                 <h1 class="itemtype <?php echo htmlspecialchars($item['type']); ?> "><?php echo htmlspecialchars($item['type']); ?></h1>
+                            </td>
+                            <td>
+                                <?php if ($item['type'] === 'Lost'): ?>
+                                    <form action="../claim/claim_form_handler.php" method="POST">
+                                        <input type="hidden" name="id" value="<?php echo htmlspecialchars($item['id']); ?>">
+                                        <button type="submit" class="button">Claim This</button>
+                                    </form>
+                                <?php elseif ($item['type'] === 'Claimed'): ?>
+                                    <span>Item Claimed</span>
+                                <?php else: ?>
+                                    <span>Thank You</span>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
